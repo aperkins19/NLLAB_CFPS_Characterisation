@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+
+  cfps_data_analysis:
+    build: ./cfps_data_analysis/
+    image: cfps_data_analysis_img
+    container_name: cfps_data_analysis_cntr
+
+    ports:
+      - 2050:2050
+
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+
+    volumes:
+      - ./cfps_data_analysis:/data_pipeline_app
+

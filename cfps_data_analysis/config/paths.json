@@ -1,0 +1,10 @@
+{   "Input": {
+        "Raw_Data": "/data_pipeline_app/raw_data/",
+        "Well_Metadata": "/data_pipeline_app/config/well_metadata.json"
+    },
+    "Output": {
+        "Datasets": "/data_pipeline_app/output/datasets/",
+        "Plots" : "/data_pipeline_app/output/plots/",
+        "tmp": "/data_pipeline_app/output/tmp/"
+    }
+}
