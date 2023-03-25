@@ -1,6 +1,7 @@
 {   "Input": {
         "Raw_Data": "/data_pipeline_app/raw_data/",
-        "Well_Metadata": "/data_pipeline_app/config/well_metadata.json"
+        "Well_Metadata": "/data_pipeline_app/config/well_metadata.json",
+        "Lysate_Data_Categories": "/data_pipeline_app/config/lysate_data_categories.json"
     },
     "Output": {
         "Datasets": "/data_pipeline_app/output/datasets/",

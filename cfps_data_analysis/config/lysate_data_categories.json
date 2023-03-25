@@ -1,0 +1,58 @@
+{
+    "Maxi Growth Time": {
+        "Type": "Numberic"
+    },
+    "Total Culture Volume ": {
+        "Type": "Numberic"
+    }, 
+    "Cell Pellet Mass": {
+        "Type": "Numberic"
+    },
+    "S30A Volume Added": {
+        "Type": "Numberic"
+    },
+    "Freeze Speed": {
+        "Type": "Numberic"
+    },
+    "Pellet Mass : S30A Vol. Ratio": {
+        "Type": "Numberic"
+    },
+    "Total Resuspension Volume": {
+        "Type": "Numberic"
+    },
+    "Thaw time": {
+        "Type": "Numberic"
+    },
+    "Sonication Vessel Volume": {
+        "Type": "Numberic"
+    },
+    "Sonication Aliquot Volume": {
+        "Type": "Numberic"
+    },
+    "Pellet Mass : S30A Vol. Ratio at Sonication": {
+        "Type": "Numberic"
+    },
+    "Sonication Programme": {
+        "Type": "Numberic"
+    },
+    "Clarified S30 Extract Volume": {
+        "Type": "Numberic"
+    },
+    "S12 Extract Clarity": {
+        "Type": "Numberic"
+    },
+    "Midi OD600": {
+        "Type": "Numberic"
+    },
+    "Mini Growth Time": {
+        "Type": "Numberic"
+    },
+    "Midi Growth Time": {
+        "Type": "Numberic"
+    },
+    "Harvest OD600": {
+        "Type": "Numberic"
+    }
+
+    
+}
