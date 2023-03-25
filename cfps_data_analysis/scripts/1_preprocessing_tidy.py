@@ -75,4 +75,4 @@ timecourse_annotated = AnnotateExperimentWideMetadata(timecourse_annotated_wells
 """
 Save to disk
 """
-timecourse_annotated.to_csv(paths["Output"]["Datasets"]+"tidy_data.csv")
+timecourse_annotated.to_csv(paths["Output"]["Datasets"]+"tidy_data.csv", index=False)
