@@ -6,5 +6,7 @@
         "Datasets": "/data_pipeline_app/output/datasets/",
         "Plots" : "/data_pipeline_app/output/plots/",
         "tmp": "/data_pipeline_app/output/tmp/"
-    }
+    },
+
+    "API_Authentication": "/data_pipeline_app/config/auth.json"
 }
