@@ -4,4 +4,4 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-auth.json
+/cfps_data_analysis/config/auth.json
