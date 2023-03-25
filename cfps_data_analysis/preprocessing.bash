@@ -13,3 +13,5 @@ mkdir output/tmp
 # run scripts
 python3 "scripts/1_preprocessing_tidy.py"
 
+python3 "scripts/2_labstep_annotation.py"
+
