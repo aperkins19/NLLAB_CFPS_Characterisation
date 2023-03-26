@@ -4,7 +4,7 @@ import subprocess
 
 
 """"
-test
+bash script for preprocessing
 """
 def run_preprocessing_bash_script():
 
