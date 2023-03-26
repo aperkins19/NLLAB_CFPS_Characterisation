@@ -1,7 +1,9 @@
 {   "Input": {
+
         "Raw_Data": "/DataDashboard_app/cfps_data_analysis/raw_data/",
         "Well_Metadata": "/DataDashboard_app/cfps_data_analysis/config/well_metadata.json",
-        "Lysate_Data_Categories": "/DataDashboard_app/cfps_data_analysis/config/lysate_data_categories.json"
+        "Lysate_Data_Categories": "/DataDashboard_app/cfps_data_analysis/config/lysate_data_categories.json",
+        "Analysis_Config": "/DataDashboard_app/cfps_data_analysis/config/analysis_config.json"
     },
     "Output": {
         "Output": "/DataDashboard_app/cfps_data_analysis/output/",
@@ -11,6 +13,12 @@
         "tmp": "/DataDashboard_app/cfps_data_analysis/output/tmp/"
     },
 
+    "Calibration":{
+        "Models": "/DataDashboard_app/cfps_data_analysis/Calibration/models/",
+        "Data": "/DataDashboard_app/cfps_data_analysis/Calibration/data/"
+    },
+
     "API_Authentication": "/DataDashboard_app/cfps_data_analysis/config/auth.json",
-    "Bash_Preprocessing": "/DataDashboard_app/cfps_data_analysis/preprocessing.bash"
+    "Bash_Preprocessing": "/DataDashboard_app/cfps_data_analysis/preprocessing.bash",
+    "Lysate_Inventory_List": "/DataDashboard_app/webapp/utils/lysate_list.json"
 }
