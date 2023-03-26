@@ -13,5 +13,7 @@ mkdir /DataDashboard_app/cfps_data_analysis/output/tmp
 # run scripts
 python3 "/DataDashboard_app/cfps_data_analysis/scripts/1_preprocessing_tidy.py"
 
-python3 "/DataDashboard_app/cfps_data_analysis/scripts/2_labstep_annotation.py"
+python3 "/DataDashboard_app/cfps_data_analysis/scripts/2_GFP_Calibration.py"
+
+python3 "/DataDashboard_app/cfps_data_analysis/scripts/3_labstep_annotation.py"
 
