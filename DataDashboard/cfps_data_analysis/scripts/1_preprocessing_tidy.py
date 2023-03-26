@@ -15,7 +15,7 @@ import os
 from analysis_functions.preprocessing import *
 
 # get paths
-paths = json.load(open("/data_pipeline_app/config/paths.json"))
+paths = json.load(open("/DataDashboard_app/cfps_data_analysis/config/paths.json"))
 
 """
 Import:

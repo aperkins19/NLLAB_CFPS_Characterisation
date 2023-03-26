@@ -13,11 +13,15 @@ RUN export PYTHONDONTWRITEBYTECODE=1
 # upgrades pip
 RUN pip3 -q install pip --upgrade
 
-RUN mkdir data_pipeline_app
-WORKDIR data_pipeline_app/
+RUN mkdir DataDashboard_app
+WORKDIR /DataDashboard_app/
 COPY . .
 RUN pip3 install -r installation/requirements.txt
 
-WORKDIR /data_pipeline_app/
+WORKDIR /DataDashboard_app/
 
-#CMD ["jupyter", "notebook", "--port=8888", "--no-browser", "--ip=0.0.0.0", "--allow-root"]
+EXPOSE 2051
+
+HEALTHCHECK CMD curl --fail http://localhost:2051/_stcore/health
+
+ENTRYPOINT ["streamlit", "run", "./webapp/Main.py", "--server.port=2051", "--server.address=0.0.0.0"]

@@ -15,7 +15,7 @@ import labstep
 from analysis_functions.labstep_utils import *
 
 # get paths
-paths = json.load(open("/data_pipeline_app/config/paths.json"))
+paths = json.load(open("/DataDashboard_app/cfps_data_analysis/config/paths.json"))
 
 # get api_authentication
 labstep_api_auth = json.load(open(paths["API_Authentication"]))

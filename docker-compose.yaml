@@ -2,17 +2,17 @@ version: '3.8'
 
 services:
 
-  cfps_data_analysis:
-    build: ./cfps_data_analysis/
-    image: cfps_data_analysis_img
-    container_name: cfps_data_analysis_cntr
+  DataDashboard:
+    build: ./DataDashboard/
+    image: datadashboard_img
+    container_name: datadashboard_cntr
 
     ports:
-      - 2050:2050
+      - 2051:2051
 
     stdin_open: true # docker run -i
     tty: true        # docker run -t
 
     volumes:
-      - ./cfps_data_analysis:/data_pipeline_app
+      - ./DataDashboard:/DataDashboard_app
 

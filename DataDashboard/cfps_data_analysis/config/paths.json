@@ -1,0 +1,13 @@
+{   "Input": {
+        "Raw_Data": "/DataDashboard_app/cfps_data_analysis/raw_data/",
+        "Well_Metadata": "/DataDashboard_app/cfps_data_analysis/config/well_metadata.json",
+        "Lysate_Data_Categories": "/DataDashboard_app/cfps_data_analysis/config/lysate_data_categories.json"
+    },
+    "Output": {
+        "Datasets": "/DataDashboard_app/cfps_data_analysis/output/datasets/",
+        "Plots" : "/DataDashboard_app/cfps_data_analysis/output/plots/",
+        "tmp": "/DataDashboard_app/cfps_data_analysis/output/tmp/"
+    },
+
+    "API_Authentication": "/DataDashboard_app/cfps_data_analysis/config/auth.json"
+}
