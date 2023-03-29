@@ -16,7 +16,7 @@ def GetTimeInMinutes(trimmed_timecourse_data):
         # individually strip the hours, minutes and seconds out of trimmed_timecourse_data["Time"] by using the index i
         # multiply by relevant factor
         # append to list
-        seconds_list.append(datetime.strptime(trimmed_timecourse_data["Time"][i], "%H:%M:%S").second + (datetime.strptime(trimmed_timecourse_data["Time"][i], "%H:%M:%S").minute * 60 ) + (datetime.strptime(trimmed_timecourse_data["Time"][i], "%H:%M:%S").hour * 60 * 60))
+        seconds_list.append(datetime.strptime(str(trimmed_timecourse_data["Time"][i]), "%H:%M:%S").second + (datetime.strptime(str(trimmed_timecourse_data["Time"][i]), "%H:%M:%S").minute * 60 ) + (datetime.strptime(str(trimmed_timecourse_data["Time"][i]), "%H:%M:%S").hour * 60 * 60))
 
     # insert the seconds list as Time
     trimmed_timecourse_data["Time"] = seconds_list
@@ -77,7 +77,6 @@ def TrimRawTimecourseData(raw_timecourse_data, well_metadata):
     trimmed_timecourse_data.columns = trimmed_timecourse_data.iloc[0,:]
     # delete row
     trimmed_timecourse_data = trimmed_timecourse_data.iloc[1:,:].reset_index(drop=True)
-
     # use the wells in well_metadata.keys() to trim columns
     column_list = ["Time"] + list(well_metadata.keys())
     # trim
