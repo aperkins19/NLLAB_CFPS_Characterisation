@@ -8,8 +8,6 @@ First script in the data preprocessing that:
 
 # imports
 import pandas as pd
-import json
-import os
 
 # functions
 from lysate_data_import.scripts.analysis_functions.preprocessing import *
