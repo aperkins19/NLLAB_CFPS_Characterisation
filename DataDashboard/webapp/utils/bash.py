@@ -8,9 +8,10 @@ bash script for preprocessing
 """
 def run_preprocessing_bash_script():
 
-    p = subprocess.run(
-                ["/bin/bash", "DataDashboard_app/cfps_data_analysis/preprocessing.bash"],
-                executable="/bin/bash"
-    )
-    return st.success('Data Preprocessing complete.', icon="✅")
+    exit_code = subprocess.call("/DataDashboard_app/cfps_data_analysis/preprocessing.sh")
+    
+    if exit_code == 0:
+        st.success('Data Preprocessing complete.', icon="✅")
+    else:
+        st.exception("Data Preprocessing Failed")
 
