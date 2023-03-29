@@ -1,17 +1,18 @@
+from importlib import reload
+
 import streamlit as st
 import pandas as pd
 import json
 import ast
 
 #from utils.lysate_charactisation_utils import *
+
+import utils
 from utils.bash import *
 from utils.labstep_utils import *
-from utils.plotting import *
-
-import matplotlib.pyplot as plt
-import seaborn as sns
-
+# dev modules
 import os
+
 
 # import paths
 paths = json.load(open("/DataDashboard_app/cfps_data_analysis/config/paths.json"))
@@ -246,4 +247,7 @@ if (st.session_state["raw_file_cached_status"]
         # filter data for plotting
 
         plotting_df = processed_df[["Time", "GFP_uM", "Well"]]
+
+        from utils.plotting import *
+        reload(utils.plotting)
         lysate_characterisation_subplots(processed_df)
