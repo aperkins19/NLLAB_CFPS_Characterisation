@@ -60,6 +60,7 @@ def lysate_characterisation_subplots(processed_df):
                 file_name = st.session_state["Lysate_selected"] + "_meanplot.png",
                 mime="image/png"
             )
+            st.write("test3")
             
 
     with tab2:
