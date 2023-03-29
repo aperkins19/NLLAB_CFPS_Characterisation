@@ -1,8 +1,5 @@
 {   "Paths": "/DataDashboard_app/paths.json",
     "Input": {
-
-        "Raw_Data": "/DataDashboard_app/webapp/lysate_data_import/raw_data/",
-        "Well_Metadata": "/DataDashboard_app/webapp/lysate_data_import/config/well_metadata.json",
         "Lysate_Data_Categories": "/DataDashboard_app/webapp/lysate_data_import/config/lysate_data_categories.json",
         "Analysis_Config": "/DataDashboard_app/webapp/lysate_data_import/config/analysis_config.json"
     },
