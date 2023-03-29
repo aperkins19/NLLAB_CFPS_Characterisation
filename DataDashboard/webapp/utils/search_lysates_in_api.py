@@ -52,6 +52,8 @@ def SearchForLysates(SBSG_Workspace):
     # on completion
     # stick None on the begining so that it shows up in the selection bar
     lysate_inventory_list.insert(0, "None")
+    # reverse list so that the latest shows up first
+    lysate_inventory_list.reverse()
     # build dictionary and save as json.
     to_save_json = {
         "Lysate_Inventory_List": lysate_inventory_list
