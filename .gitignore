@@ -4,4 +4,4 @@ __pycache__/
 *.py[cod]
 *$py.class
 
-DataDashboard/cfps_data_analysis/config/auth.json
+DataDashboard/auth.json
