@@ -10,13 +10,19 @@ import ast
 import utils
 from utils.bash import *
 from utils.labstep_utils import *
+
+# data processing functions
+from lysate_data_import.scripts.identify_wells import *
+from lysate_data_import.scripts.preprocessing_tidy import *
+from lysate_data_import.scripts.Calibration import *
+from lysate_data_import.scripts.labstep_annotation import *
+
 # dev modules
 import os
 
 
 # import paths
-paths = json.load(open("/DataDashboard_app/cfps_data_analysis/config/paths.json"))
-
+paths = json.load(open("/DataDashboard_app/paths.json"))
 
 ##### define functions
 
@@ -32,7 +38,6 @@ def read_processed_csv(path):
 
 
 # converts stored df to csv
-@st.cache_data
 def convert_df(df):
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
     return df.to_csv().encode('utf-8')
@@ -85,12 +90,14 @@ def raw_file_cached_status_callback():
 def form_callback():
 
     #### write metadata collected to disk before running preprocessing
-
     # write well metadata to disk
     # initialise dict
     well_type_dict = {}
     # iterate over saved wells and annotate dict
     for well in st.session_state["Wells"]:
+        # if ignore - pass
+        if well == "Ignore":
+            pass
         well_type_dict[well] = {
                         "Well_Type": st.session_state[well],
                         "Lysate_Inventory_Record": st.session_state["Lysate_selected"],
@@ -100,9 +107,6 @@ def form_callback():
         # not working
         del st.session_state[well]
 
-    # save dict to json
-    with open(paths["Input"]["Well_Metadata"], 'w') as fp:
-        json.dump(well_type_dict, fp)
     # save dict to session state
     st.session_state["Well_Metadata"] = well_type_dict
 
@@ -110,15 +114,15 @@ def form_callback():
     Analysis_Config = {
         "Calibration_Model": st.session_state["Calibration_Model_Selected"]
     }
-    ##### write analysis config json here
-    with open(paths["Input"]["Analysis_Config"], 'w') as fp:
-        json.dump(Analysis_Config, fp)
 
-    # write excel file to server input directory
-    raw_upload.to_excel(paths["Input"]["Raw_Data"]+"raw.xlsx", index=False, header=False)
-
-    run_preprocessing_bash_script()
-
+    ### execute preprocessing scripts
+    # 1. tidy the dataset
+    data_in_progress = preprocessing_tidy(raw_upload, well_type_dict, paths)
+    # 2. Calibrate signal with selected fluorescent protein model
+    data_in_progress = Calibration(data_in_progress, Analysis_Config, paths)
+    # 3. Annotated with labstep metadata
+    data_in_progress = Annotate_With_Labstep_Metadata(data_in_progress, paths)
+    st.write(data_in_progress)
 
     st.session_state["data_preprocessing_complete"] = True
    
@@ -163,12 +167,8 @@ if (st.session_state["raw_file_cached_status"]
     raw_data_df_expander =  st.expander("Show", expanded= st.session_state["raw_data_viewer_expanded"])
     raw_data_df_expander.write(raw_upload)
 
-    # get the columns by calling 0_identify_wells.py
-    columns = subprocess.run(["python3", "/DataDashboard_app/cfps_data_analysis/scripts/0_identify_wells.py"], capture_output=True).stdout
-    # decodes the bytes coming from the python print function to ascii characters and then ast decodes to a py list
-    # removes Time
-    well_list = ast.literal_eval(columns.decode('ascii'))
-    well_list.remove("Time")
+    # get the columns by calling identify_wells_in_raw_data
+    well_list = identify_wells_in_raw_data(raw_upload)
     st.session_state["Wells"] = well_list
 
     st.header("Enter Metadata:")
@@ -202,7 +202,7 @@ if (st.session_state["raw_file_cached_status"]
         well_cols[0].write(well)
         well_type_selected = well_cols[1].radio(
             "Well Type",
-            ('Experiment', 'Negative_Control'),
+            ('Experiment', 'Negative_Control', "Ignore"),
             key = well
             )
             
