@@ -1,24 +1,25 @@
-{   "Input": {
+{   "Paths": "/DataDashboard_app/paths.json",
+    "Input": {
 
-        "Raw_Data": "/DataDashboard_app/cfps_data_analysis/raw_data/",
-        "Well_Metadata": "/DataDashboard_app/cfps_data_analysis/config/well_metadata.json",
-        "Lysate_Data_Categories": "/DataDashboard_app/cfps_data_analysis/config/lysate_data_categories.json",
-        "Analysis_Config": "/DataDashboard_app/cfps_data_analysis/config/analysis_config.json"
+        "Raw_Data": "/DataDashboard_app/webapp/lysate_data_import/raw_data/",
+        "Well_Metadata": "/DataDashboard_app/webapp/lysate_data_import/config/well_metadata.json",
+        "Lysate_Data_Categories": "/DataDashboard_app/webapp/lysate_data_import/config/lysate_data_categories.json",
+        "Analysis_Config": "/DataDashboard_app/webapp/lysate_data_import/config/analysis_config.json"
     },
     "Output": {
-        "Output": "/DataDashboard_app/cfps_data_analysis/output/",
+        "Output": "/DataDashboard_app/webapp/lysate_data_import/output/",
 
-        "Datasets": "/DataDashboard_app/cfps_data_analysis/output/datasets/",
-        "Plots" : "/DataDashboard_app/cfps_data_analysis/output/plots/",
-        "tmp": "/DataDashboard_app/cfps_data_analysis/output/tmp/"
+        "Datasets": "/DataDashboard_app/webapp/lysate_data_import/output/datasets/",
+        "Plots" : "/DataDashboard_app/webapp/lysate_data_import/output/plots/",
+        "tmp": "/DataDashboard_app/webapp/lysate_data_import/output/tmp/"
     },
 
     "Calibration":{
-        "Models": "/DataDashboard_app/cfps_data_analysis/Calibration/models/",
-        "Data": "/DataDashboard_app/cfps_data_analysis/Calibration/data/"
+        "Models": "/DataDashboard_app/webapp/lysate_data_import/Calibration/models/",
+        "Data": "/DataDashboard_app/webapp/lysate_data_import/Calibration/data/"
     },
 
-    "API_Authentication": "/DataDashboard_app/cfps_data_analysis/config/auth.json",
-    "Bash_Preprocessing": "/DataDashboard_app/cfps_data_analysis/preprocessing.bash",
+    "API_Authentication": "/DataDashboard_app/auth.json",
+    "Bash_Preprocessing": "/DataDashboard_app/webapp/lysate_data_import/preprocessing.bash",
     "Lysate_Inventory_List": "/DataDashboard_app/webapp/utils/lysate_list.json"
 }
