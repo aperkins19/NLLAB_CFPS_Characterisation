@@ -59,6 +59,9 @@ raw_timecourse_data = raw_data.iloc[51:,0:].reset_index(drop=True)
 # trim
 trimmed_timecourse_data = TrimRawTimecourseData(raw_timecourse_data, well_metadata)
 
+# convert date.time hh:mm:ss to mins
+trimmed_timecourse_data = GetTimeInMinutes(trimmed_timecourse_data)
+
 # Melt wellwise
 melted_timecourse_data = MeltDataByExperimentWells(trimmed_timecourse_data, well_metadata)
 

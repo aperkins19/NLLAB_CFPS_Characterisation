@@ -1,9 +1,33 @@
 # imports
 import pandas as pd
-
+from datetime import datetime
 """
 Data Cleaning and Tidying functions
 """
+
+def GetTimeInMinutes(trimmed_timecourse_data):
+
+    # initialise list for populating
+    seconds_list = []
+
+    # interate over the rows to get the index
+    for i, row in trimmed_timecourse_data.iterrows():
+        
+        # individually strip the hours, minutes and seconds out of trimmed_timecourse_data["Time"] by using the index i
+        # multiply by relevant factor
+        # append to list
+        seconds_list.append(datetime.strptime(trimmed_timecourse_data["Time"][i], "%H:%M:%S").second + (datetime.strptime(trimmed_timecourse_data["Time"][i], "%H:%M:%S").minute * 60 ) + (datetime.strptime(trimmed_timecourse_data["Time"][i], "%H:%M:%S").hour * 60 * 60))
+
+    # insert the seconds list as Time
+    trimmed_timecourse_data["Time"] = seconds_list
+    # Divide by 60 to get minutes
+    trimmed_timecourse_data["Time"] = trimmed_timecourse_data["Time"] / 60
+
+    # if time starts at 0.05 or above 0, subtract the first time point from all
+    if trimmed_timecourse_data["Time"][0] > 0:
+        trimmed_timecourse_data["Time"] = trimmed_timecourse_data["Time"] - trimmed_timecourse_data["Time"][0]
+
+    return trimmed_timecourse_data
 
 def ExtractExperimentMetadataFromRaw(raw_metadata):
     """

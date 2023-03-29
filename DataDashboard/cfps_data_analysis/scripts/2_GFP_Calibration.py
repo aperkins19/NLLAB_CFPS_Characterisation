@@ -37,13 +37,13 @@ Analysis_Config = json.load(open(paths["Input"]["Analysis_Config"]))
 model_filename = Analysis_Config["Calibration_Model"] +".pkl"
 loaded_model = pickle.load(open(paths["Calibration"]["Models"] + model_filename, 'rb'))
 
+
 # get the name of the FP and units.
 # iterate over the string until M is found
 # use index of M to save the name.
 for i, c in enumerate(model_filename):
     if c == "M":
         FP = model_filename[:i+1]
-    
 
 # determine number of features
 if loaded_model.n_features_in_ > 2:
@@ -65,6 +65,7 @@ else:
     
 # Predict and assign to DF under the fluorescent protein and units as given in analysis config.
 tidy_data[FP] = loaded_model.predict(x)
+
 # label with the model used
 tidy_data["Calibration_Model"] = Analysis_Config["Calibration_Model"]
 

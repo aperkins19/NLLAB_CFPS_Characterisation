@@ -83,6 +83,7 @@ for i, row in tidy_data.iterrows():
             # add the 1D DF to the list 
             new_row_list.append(new_row)
 
+
 # construct the new df
 tidy_data_labstep_annotated = pd.concat(new_row_list, axis=0).reset_index(drop=True)
 
