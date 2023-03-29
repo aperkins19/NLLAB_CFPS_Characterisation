@@ -16,7 +16,7 @@ RUN pip3 -q install pip --upgrade
 RUN mkdir DataDashboard_app
 WORKDIR /DataDashboard_app/
 COPY . .
-RUN pip3 install -r installation/requirements.txt
+RUN pip3 install --no-cache-dir -r installation/requirements.txt
 
 WORKDIR /DataDashboard_app/
 
