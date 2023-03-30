@@ -18,5 +18,5 @@
 
     "API_Authentication": "/DataDashboard_app/auth.json",
     "Bash_Preprocessing": "/DataDashboard_app/webapp/lysate_data_import/preprocessing.bash",
-    "Lysate_Inventory_List": "/DataDashboard_app/webapp/utils/lysate_list.json"
+    "Lysate_Inventory_List": "/DataDashboard_app/webapp/static/lysate_list.json"
 }
