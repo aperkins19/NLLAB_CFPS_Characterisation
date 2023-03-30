@@ -4,9 +4,19 @@ import seaborn as sns
 import streamlit as st
 import os
 
-def lysate_characterisation_subplots(processed_df, paths):
-        
-    plotting_df = processed_df[["Time", "GFP_uM", "Well"]]
+def lysate_characterisation_subplots(processed_df, negative_control_designated, paths):
+
+
+
+    if negative_control_designated == True:
+        processed_df = processed_df.loc[processed_df["Well_Type"] != "Negative_Control"]
+        y = "GFP_uM"
+
+    else:
+        y = "RFUs"
+
+    plotting_df = processed_df[["Time", y, "Well"]]
+
     #st.write(plotting_df.head())
 
     st.subheader("View your data")
@@ -23,7 +33,7 @@ def lysate_characterisation_subplots(processed_df, paths):
         sns.lineplot(
                 data = plotting_df,
                 x="Time",
-                y="GFP_uM",
+                y=y,
                 linewidth=1,
                 ax = ax,
                 errorbar = "sd",
@@ -33,7 +43,7 @@ def lysate_characterisation_subplots(processed_df, paths):
 
         # calculating plot parameters
         # get the max gfp and round to nearest 0.01
-        max_gfp = round(processed_df["GFP_uM"].max(),2)
+        max_gfp = round(processed_df[y].max(),2)
         max_time = round(processed_df["Time"].max())
 
         time_ticks = []
@@ -71,7 +81,7 @@ def lysate_characterisation_subplots(processed_df, paths):
         sns.lineplot(
                 data = plotting_df,
                 x="Time",
-                y="GFP_uM",
+                y=y,
                 hue="Well",
                 linewidth=1,
                 ax = ax,
@@ -81,7 +91,7 @@ def lysate_characterisation_subplots(processed_df, paths):
 
         # calculating plot parameters
         # get the max gfp and round to nearest 0.01
-        max_gfp = round(processed_df["GFP_uM"].max(),2)
+        max_gfp = round(processed_df[y].max(),2)
         max_time = round(processed_df["Time"].max())
 
         time_ticks = []
