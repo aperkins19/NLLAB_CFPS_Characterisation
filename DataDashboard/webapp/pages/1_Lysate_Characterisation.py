@@ -1,14 +1,7 @@
-from importlib import reload
-
 import streamlit as st
 import pandas as pd
 import json
-import ast
 
-#from utils.lysate_charactisation_utils import *
-
-import utils
-from utils.bash import *
 from utils.labstep_utils import *
 
 # data processing functions
@@ -31,12 +24,6 @@ paths = json.load(open("/DataDashboard_app/paths.json"))
 def read_uploaded_excel(uploaded_file):
     return pd.read_excel(uploaded_file, header=None)
 
-# reads processed csv data file and caches in server memory
-def read_processed_csv(path):
-    df = pd.read_csv(path)
-    return df
-
-
 # converts stored df to csv
 def convert_df(df):
     # IMPORTANT: Cache the conversion to prevent computation on every rerun
@@ -44,6 +31,9 @@ def convert_df(df):
 
 #######
 # initialise session states for buttons and cached files
+if "processed_data" not in st.session_state:
+    st.session_state["processed_data"] = None
+
 if "raw_data_viewer_expanded" not in st.session_state:
     st.session_state["raw_data_viewer_expanded"] = True
 
@@ -76,15 +66,26 @@ if "Calibration_Models_Available" not in st.session_state:
 if "Lysate_Inventory_List" not in st.session_state:
     # midly hacky way to import the json storing the lysates found in the database
     st.session_state["Lysate_Inventory_List"] = []
-    for lysate in list(json.load(open("/DataDashboard_app/webapp/utils/lysate_list.json")).values()):
+    for lysate in list(json.load(open(paths["Lysate_Inventory_List"])).values()):
         st.session_state["Lysate_Inventory_List"] = st.session_state["Lysate_Inventory_List"] + lysate
 
 if "Lysate_selected" not in st.session_state:
-    st.session_state["Lysate_selected"] = "None"   
+    st.session_state["Lysate_selected"] = "None"
+
+if "negative_control_designated" not in st.session_state:
+    st.session_state["negative_control_designated"] = False
 
 # define callbacks for updating button click session states
 def raw_file_cached_status_callback():
     st.session_state["raw_file_cached_status"] = True
+
+
+def lysate_refresh_callback():
+    # wait message
+    st.info('Refreshing Lysate List by querying Labstep Database. This may take a few seconds..', icon="ℹ️")
+    # execute python script
+    SearchForLysates(paths)
+    st.success('Lysates refreshed. Reload the page to see them.', icon="✅")
 
 
 def form_callback():
@@ -95,8 +96,11 @@ def form_callback():
     well_type_dict = {}
     # iterate over saved wells and annotate dict
     for well in st.session_state["Wells"]:
+        # if negative control set session state for preprocessing
+        if st.session_state[well] == "Negative_Control":
+            st.session_state["negative_control_designated"] = True
         # if ignore - pass
-        if well == "Ignore":
+        if st.session_state[well] == "Ignore":
             pass
         well_type_dict[well] = {
                         "Well_Type": st.session_state[well],
@@ -117,12 +121,13 @@ def form_callback():
 
     ### execute preprocessing scripts
     # 1. tidy the dataset
-    data_in_progress = preprocessing_tidy(raw_upload, well_type_dict, paths)
+    data_in_progress = preprocessing_tidy(raw_upload, well_type_dict, st.session_state["negative_control_designated"], paths)
     # 2. Calibrate signal with selected fluorescent protein model
-    data_in_progress = Calibration(data_in_progress, Analysis_Config, paths)
+    data_in_progress = Calibration(data_in_progress, st.session_state["negative_control_designated"], Analysis_Config, paths)
     # 3. Annotated with labstep metadata
-    data_in_progress = Annotate_With_Labstep_Metadata(data_in_progress, paths)
-    st.write(data_in_progress)
+    processed_df = Annotate_With_Labstep_Metadata(data_in_progress, paths)
+    # 4. Cache the processed data to be accessed in the script
+    st.session_state["processed_data"] = processed_df
 
     st.session_state["data_preprocessing_complete"] = True
    
@@ -212,24 +217,19 @@ if (st.session_state["raw_file_cached_status"]
     
     # Refresh button
     st.write("Don't see your lysate? Try refreshing the list:")
-    
     # button initialisation
-    refresh_lysates = st.button("Refresh Lysate List")
+    refresh_lysates = st.button("Refresh Lysate List", on_click = lysate_refresh_callback)
 
-    # on call
-    if refresh_lysates:
-        # wait message
-        st.info('Refreshing Lysate List by querying Labstep Database. This may take a few seconds..', icon="ℹ️")
-        # execute python script
-        s = subprocess.run(["python3", "/DataDashboard_app/webapp/utils/search_lysates_in_api.py"])
-        st.success('Lysates refreshed. Reload the page to see them.', icon="✅")
+
             
     if (
         st.session_state["data_preprocessing_complete"]
         ):
 
-        processed_df = read_processed_csv(paths["Output"]["Datasets"]+"tidy_data_labstep_annotated.csv")
-        
+        # read the processed data out of the session state as saved in the submit call back
+        processed_df = st.session_state["processed_data"]
+
+
         st.subheader("Processed Tidy Dataset:")
         processed_data_expander = st.expander("Show", expanded = st.session_state["processed_data_expanded"])
         processed_data_expander.write(processed_df)
@@ -244,10 +244,6 @@ if (st.session_state["raw_file_cached_status"]
         )
 
         ## plotting
-        # filter data for plotting
-
-        plotting_df = processed_df[["Time", "GFP_uM", "Well"]]
 
         from utils.plotting import *
-        reload(utils.plotting)
-        lysate_characterisation_subplots(processed_df)
+        lysate_characterisation_subplots(processed_df, st.session_state["negative_control_designated"], paths)

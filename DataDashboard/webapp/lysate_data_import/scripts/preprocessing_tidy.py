@@ -8,20 +8,13 @@ First script in the data preprocessing that:
 
 # imports
 import pandas as pd
+import streamlit as st
 
 # functions
 from lysate_data_import.scripts.analysis_functions.preprocessing import *
 
-def preprocessing_tidy(raw_data, well_metadata, paths):
+def preprocessing_tidy(raw_data, well_metadata, negative_control_designated, paths):
 
-    """
-    Import:
-    * Raw data
-    * well metadata
-    """
-
-    ### import well_metadata.json
-    #well_metadata = json.load(open(paths["Input"]["Well_Metadata"]))
 
     """
     Slice and Tidy the raw data and metadata
@@ -50,6 +43,10 @@ def preprocessing_tidy(raw_data, well_metadata, paths):
 
     # Melt wellwise
     melted_timecourse_data = MeltDataByExperimentWells(trimmed_timecourse_data, well_metadata)
+    
+    # baseline subtract
+    if negative_control_designated == True:
+        melted_timecourse_data = baseline_subtract_data(melted_timecourse_data, trimmed_timecourse_data, well_metadata)
 
     """
     Metadata Annotation

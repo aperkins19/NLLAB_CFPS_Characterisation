@@ -1,9 +1,44 @@
 # imports
 import pandas as pd
 from datetime import datetime
+import streamlit as st
 """
 Data Cleaning and Tidying functions
 """
+
+def baseline_subtract_data(melted_timecourse_data, trimmed_timecourse_data, well_metadata):
+
+
+    # get the well types as lists
+    # all wells
+    well_list = []
+    negative_control_well_list = []
+
+    for well in well_metadata:
+        well_list.append(well)
+        if well_metadata[well]["Well_Type"] == "Negative_Control":
+            negative_control_well_list.append(well)
+
+    # now create column in trimmed_timecourse_data for negative control average
+    trimmed_timecourse_data["negative_mean"] = trimmed_timecourse_data[negative_control_well_list].mean(axis=1)
+
+    # get unique times
+    time_list = list(melted_timecourse_data["Time"].unique())
+
+    # list for populating
+    RFUs_Baseline_Subtracted_List = []
+    # slice by well
+    for well in well_list:
+        well_slice = melted_timecourse_data[melted_timecourse_data["Well"] == well].copy()
+        #slice by time
+        for time in time_list:
+            # minus every well from the average of the negatives at that time point
+            RFUs_Baseline_Subtracted = int(well_slice[well_slice["Time"]==time]["RFUs"]) - int(trimmed_timecourse_data[trimmed_timecourse_data["Time"]==time]["negative_mean"])
+            RFUs_Baseline_Subtracted_List.append(RFUs_Baseline_Subtracted)
+    # set list as new column
+    melted_timecourse_data["RFUs_Baseline_Subtracted"] = RFUs_Baseline_Subtracted_List
+
+    return melted_timecourse_data
 
 def GetTimeInMinutes(trimmed_timecourse_data):
 
@@ -126,6 +161,7 @@ def WellSpecificMetadataAnnotation(melted_timecourse_data, well_metadata):
 
     # iterate over the wells in well_metadata
     for well in list(well_metadata.keys()):
+
 
         # slice dataframe to get one well
         well_specific_slice = melted_timecourse_data[melted_timecourse_data["Well"] == well].copy()
