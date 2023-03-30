@@ -4,7 +4,6 @@
         "Analysis_Config": "/DataDashboard_app/webapp/lysate_data_import/config/analysis_config.json"
     },
     "Output": {
-        "Output": "/DataDashboard_app/webapp/lysate_data_import/output/",
         "tmp": "/DataDashboard_app/webapp/static/tmp/"
     },
 
