@@ -17,7 +17,13 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 
-def Calibration(tidy_data, Analysis_Config, paths):
+def Calibration(tidy_data, negative_control_designated,  Analysis_Config, paths):
+
+    # if blank subracted then use that
+    if negative_control_designated:
+        data_to_calibrate = np.array(tidy_data["RFUs_Baseline_Subtracted"]).reshape(-1,1)
+    else:
+        data_to_calibrate = np.array(tidy_data["RFUs"]).reshape(-1,1)
 
     # load selected model
     model_filename = Analysis_Config["Calibration_Model"] +".pkl"
@@ -43,11 +49,11 @@ def Calibration(tidy_data, Analysis_Config, paths):
         
         # reshape the RFU column in to numpy array and transform to fit the poly features
         x = poly.fit_transform(
-            np.array(tidy_data["RFUs"]).reshape(-1,1)
+            data_to_calibrate
             )
         
     else:
-        x = np.array(tidy_data["RFUs"]).reshape(-1,1)
+        x = data_to_calibrate
         
     # Predict and assign to DF under the fluorescent protein and units as given in analysis config.
     tidy_data[FP] = loaded_model.predict(x)
