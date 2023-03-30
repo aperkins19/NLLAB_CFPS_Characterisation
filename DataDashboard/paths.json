@@ -5,10 +5,7 @@
     },
     "Output": {
         "Output": "/DataDashboard_app/webapp/lysate_data_import/output/",
-
-        "Datasets": "/DataDashboard_app/webapp/lysate_data_import/output/datasets/",
-        "Plots" : "/DataDashboard_app/webapp/lysate_data_import/output/plots/",
-        "tmp": "/DataDashboard_app/webapp/lysate_data_import/output/tmp/"
+        "tmp": "/DataDashboard_app/webapp/static/tmp/"
     },
 
     "Calibration":{

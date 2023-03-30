@@ -5,3 +5,5 @@ __pycache__/
 *$py.class
 
 DataDashboard/auth.json
+
+DataDashboard/webapp/static/tmp/
