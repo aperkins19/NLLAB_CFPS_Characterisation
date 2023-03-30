@@ -1,7 +1,6 @@
 {   "Paths": "/DataDashboard_app/paths.json",
     "Input": {
-        "Lysate_Data_Categories": "/DataDashboard_app/webapp/lysate_data_import/config/lysate_data_categories.json",
-        "Analysis_Config": "/DataDashboard_app/webapp/lysate_data_import/config/analysis_config.json"
+        "Lysate_Data_Categories": "/DataDashboard_app/webapp/lysate_data_import/config/lysate_data_categories.json"
     },
     "Output": {
         "tmp": "/DataDashboard_app/webapp/static/tmp/"
@@ -13,6 +12,5 @@
     },
 
     "API_Authentication": "/DataDashboard_app/auth.json",
-    "Bash_Preprocessing": "/DataDashboard_app/webapp/lysate_data_import/preprocessing.bash",
     "Lysate_Inventory_List": "/DataDashboard_app/webapp/static/lysate_list.json"
 }
