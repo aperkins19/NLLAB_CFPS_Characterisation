@@ -4,7 +4,7 @@ import seaborn as sns
 import streamlit as st
 import os
 
-def lysate_characterisation_subplots(processed_df):
+def lysate_characterisation_subplots(processed_df, paths):
         
     plotting_df = processed_df[["Time", "GFP_uM", "Well"]]
     #st.write(plotting_df.head())
@@ -49,18 +49,17 @@ def lysate_characterisation_subplots(processed_df):
         ax.set_xlabel("Time (Mins)", size = "x-large")
         
 
-        fig.savefig("/DataDashboard_app/webapp/static/" + st.session_state["Lysate_selected"] + "_meanplot.png")
+        fig.savefig(paths["Output"]["tmp"] + st.session_state["Lysate_selected"] + "_meanplot.png")
 
         st.pyplot(fig)
 
-        with open("/DataDashboard_app/webapp/static/" + st.session_state["Lysate_selected"] + "_meanplot.png", "rb") as file:        
+        with open(paths["Output"]["tmp"] + st.session_state["Lysate_selected"] + "_meanplot.png", "rb") as file:        
             st.download_button(
                 label="Download Mean Plot",
                 data = file,
                 file_name = st.session_state["Lysate_selected"] + "_meanplot.png",
                 mime="image/png"
             )
-            st.write("test3")
             
 
     with tab2:
@@ -97,11 +96,11 @@ def lysate_characterisation_subplots(processed_df):
         ax.set_xticklabels([0, max_time/2, max_time], size = "x-large")
         ax.set_xlabel("Time (Mins)", size = "x-large")
         
-        fig.savefig("/DataDashboard_app/webapp/static/" + st.session_state["Lysate_selected"] + "_individual_replicates_plot.png")
+        fig.savefig(paths["Output"]["tmp"] + st.session_state["Lysate_selected"] + "_individual_replicates_plot.png")
 
         st.pyplot(fig)
         
-        with open("/DataDashboard_app/webapp/static/" + st.session_state["Lysate_selected"] + "_individual_replicates_plot.png", "rb") as file:        
+        with open(paths["Output"]["tmp"] + st.session_state["Lysate_selected"] + "_individual_replicates_plot.png", "rb") as file:        
             st.download_button(
                 label="Download Individual Replicates Plot",
                 data = file,
