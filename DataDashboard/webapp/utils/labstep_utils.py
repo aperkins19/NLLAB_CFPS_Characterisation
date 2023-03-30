@@ -65,8 +65,6 @@ def SearchForLysates(paths):
         if break_counter > 5:
             break
 
-
-    st.write(lysate_inventory_list)
     # on completion
     # stick None on the begining so that it shows up in the selection bar
     lysate_inventory_list.insert(0, "None")
