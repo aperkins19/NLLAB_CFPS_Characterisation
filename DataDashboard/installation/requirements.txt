@@ -27,6 +27,7 @@ deprecat==2.1.1
 Deprecated==1.2.13
 dexpy==0.12
 dill==0.3.6
+dnspython==2.3.0
 entrypoints==0.4
 et-xmlfile==1.1.0
 executing==1.2.0
@@ -99,6 +100,7 @@ pydeck==0.8.0
 pydot==1.4.2
 Pygments==2.14.0
 pymc3==3.11.5
+pymongo==4.3.3
 Pympler==1.0.1
 pyparsing==3.0.9
 pyrsistent==0.19.3

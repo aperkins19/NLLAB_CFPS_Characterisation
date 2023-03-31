@@ -3,7 +3,9 @@ import pandas as pd
 import json
 
 from utils.labstep_utils import *
+from utils.mongo_utils import *
 
+database = mongo_login()
 # data processing functions
 from lysate_data_import.scripts.identify_wells import *
 from lysate_data_import.scripts.preprocessing_tidy import *
@@ -75,6 +77,9 @@ if "Lysate_selected" not in st.session_state:
 if "negative_control_designated" not in st.session_state:
     st.session_state["negative_control_designated"] = False
 
+if "acceptable_to_submit" not in st.session_state:
+    st.session_state["acceptable_to_submit"] = False
+
 # define callbacks for updating button click session states
 def raw_file_cached_status_callback():
     st.session_state["raw_file_cached_status"] = True
@@ -86,6 +91,18 @@ def lysate_refresh_callback():
     # execute python script
     SearchForLysates(paths)
     st.success('Lysates refreshed. Reload the page to see them.', icon="✅")
+
+
+def submit_to_database_callback():
+    # Mongo login
+    database = mongo_login()
+    Lysate_Timecourse_collection = database["Lysate_Timecourse"]
+    processed_df.reset_index(drop=True)
+    data_dict = processed_df.to_dict("records")
+    # Insert collection
+    Lysate_Timecourse_collection.insert_many(data_dict)
+
+
 
 
 def form_callback():
@@ -136,6 +153,12 @@ def form_callback():
     # minimise forms
     st.session_state["raw_data_viewer_expanded"] = False
     st.session_state["form_expanded"] = False
+
+    # Data acceptible to submit to database and display submit button
+    if (
+        st.session_state["form_submitted"] == True
+    ):
+        st.session_state["acceptable_to_submit"] = True
 
 
 #### begin page
@@ -247,3 +270,17 @@ if (st.session_state["raw_file_cached_status"]
 
         from utils.plotting import *
         lysate_characterisation_subplots(processed_df, st.session_state["negative_control_designated"], paths)
+
+        if st.session_state["acceptable_to_submit"]:
+
+            submit_to_database_container = st.container()
+
+            submit_to_database_container.header("submit_to_database_container")
+
+            submit_to_database_container.write("explain")
+
+            submit_to_database_container.button(
+                "Submit",
+                key="submit_to_database_button",
+                on_click = submit_to_database_callback
+                )
