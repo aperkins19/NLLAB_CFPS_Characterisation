@@ -4,6 +4,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+#Labstep Auth
 DataDashboard/auth.json
+#MDB auth
+.env
 
+# output
 DataDashboard/webapp/static/tmp/
+database_data
