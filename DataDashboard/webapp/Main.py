@@ -88,7 +88,7 @@ st.sidebar.subheader("Select Data")
 
 expression_system_selected = st.sidebar.selectbox(
     "Select Expression System:",
-    ["T7_GFP_uM", "s70_GFP_uM", "All"]
+    ["All", "T7_GFP_uM", "s70_GFP_uM"]
 )
 
 y_values = st.sidebar.selectbox(
