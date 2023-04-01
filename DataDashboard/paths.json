@@ -14,5 +14,6 @@
     "API_Authentication": "/DataDashboard_app/auth/auth.json",
     "Lysate_Inventory_List": "/DataDashboard_app/webapp/static/lysate_list.json",
     "Webapp_Authentication": "/DataDashboard_app/auth/admin_users.yaml",
-    "SBSG_Logo": "/DataDashboard_app/webapp/static/cfpslogo.png"
+    "SBSG_Logo": "/DataDashboard_app/webapp/static/cfpslogo.png",
+    "Lab_Member_List": "/DataDashboard_app/webapp/static/lab_members.json"
 }
