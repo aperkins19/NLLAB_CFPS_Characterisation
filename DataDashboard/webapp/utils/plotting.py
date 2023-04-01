@@ -36,7 +36,7 @@ def lysate_characterisation_subplots(processed_df, negative_control_designated, 
                 y=y,
                 linewidth=1,
                 ax = ax,
-                errorbar = "sd",
+                errorbar = "se",
                 legend = None,
                 color = "seagreen"
                 )
