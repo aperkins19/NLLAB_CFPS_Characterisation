@@ -9,18 +9,32 @@ import seaborn as sns
 import plotly.express as px
 from utils.mongo_utils import *
 
+
+# get paths
+paths = json.load(open("/DataDashboard_app/paths.json"))
+
+
 st.set_page_config(
     page_title="SBSG Data Science Dashboard",
-    page_icon="✅",
+    page_icon=paths["SBSG_Logo"],
     layout="wide",
 )
 
-if "manufacture_metadata_expanded" not in st.session_state:
-    st.session_state["manufacture_metadata_expanded"] = True
+# ---- initalise paths, functions, callbacks and session states ----
 
-def filter_df_for_plotting(Lysate_Timecourse_pd, meta_data_selected, max_time_selected, selected_lysates):
+if "cell_culture_metadata_expanded" not in st.session_state:
+    st.session_state["cell_culture_metadata_expanded"] = True
 
+if "lysis_metadata_expanded" not in st.session_state:
+    st.session_state["lysis_metadata_expanded"] = True
+
+def filter_df_for_plotting(Lysate_Timecourse_pd, expression_system_selected, meta_data_selected, max_time_selected, selected_lysates):
+
+    # delete negative controls
     filtered_df = Lysate_Timecourse_pd[Lysate_Timecourse_pd.Well_Type != "Negative_Control"]
+    # expression system
+    if expression_system_selected != "All":
+        filtered_df = filtered_df[filtered_df.Well_Type == expression_system_selected]
     filtered_df = filtered_df[filtered_df.Time <= max_time_selected]
     filtered_df = filtered_df.loc[filtered_df['Lysate_Inventory_Record'].isin(selected_lysates)]
 
@@ -30,11 +44,9 @@ def filter_df_for_plotting(Lysate_Timecourse_pd, meta_data_selected, max_time_se
     return filtered_df, meta_data_filtered_df
 
 def refilter_callback():
-    filter_df_for_plotting(Lysate_Timecourse_pd, meta_data_selected, max_time_selected, selected_lysates)
+    filter_df_for_plotting(Lysate_Timecourse_pd, expression_system_selected, meta_data_selected, max_time_selected, selected_lysates)
 
 
-# get paths
-paths = json.load(open("/DataDashboard_app/paths.json"))
 
 # get dataset
 database = mongo_login()
@@ -49,6 +61,8 @@ time_list = Lysate_Timecourse_pd["Time"].unique()
 min_time = Lysate_Timecourse_pd.loc[:,"Time"].min()
 max_time = Lysate_Timecourse_pd.loc[:,"Time"].max()
 
+
+# ---- manufacturing metadata organisation ----
 Lysate_Data_Categories = json.load(open(paths["Input"]["Lysate_Data_Categories"]))
 Lysate_Data_Categories_names = []
 Cell_Culture_Data_Categories_name = []
@@ -63,6 +77,11 @@ for key in Lysate_Data_Categories.keys():
 # Sidebar
 # Using object notation
 st.sidebar.subheader("Select Data")
+
+expression_system_selected = st.sidebar.selectbox(
+    "Select Expression System:",
+    ["T7_GFP_uM", "s70_GFP_uM", "All"]
+)
 
 y_values = st.sidebar.selectbox(
     "Y-Axis:",
@@ -91,7 +110,7 @@ meta_data_selected = st.sidebar.multiselect(
     Lysate_Data_Categories_names,
     Lysate_Data_Categories_names)
 
-filtered_df, meta_data_filtered_df = filter_df_for_plotting(Lysate_Timecourse_pd, meta_data_selected, max_time_selected, selected_lysates)
+filtered_df, meta_data_filtered_df = filter_df_for_plotting(Lysate_Timecourse_pd, expression_system_selected, meta_data_selected, max_time_selected, selected_lysates)
 
 
 ## header
@@ -164,13 +183,16 @@ with endpoint_col:
     st.pyplot(fig)
 
 
-st.subheader("Manufacturing Data:")
 
-manufacture_metadata_container = st.expander("Show", expanded = st.session_state["manufacture_metadata_expanded"])
+# ---- Manufacturing metadata plotting
 
-#manufacture_metadata_container.dataframe(meta_data_filtered_df)
+# ---- Cell culture
 
-metadata_cols = manufacture_metadata_container.columns(2)
+st.subheader("Cell Culture Data:")
+
+cell_culture_metadata_container = st.expander("Show", expanded = st.session_state["cell_culture_metadata_expanded"])
+
+metadata_cols = cell_culture_metadata_container.columns(2)
 
 ## cell culture set up
 cell_culture_metadata_df = Lysate_Timecourse_pd.loc[Lysate_Timecourse_pd['Lysate_Inventory_Record'].isin(selected_lysates)]
@@ -195,4 +217,13 @@ fig = px.bar(cell_culture_metadata_df, x="Metric", color="Lysate_Inventory_Recor
 
 
 metadata_cols[0].plotly_chart(fig)
+
+
 metadata_cols[1].write("test")
+
+# ---- Lysis metadata
+
+st.subheader("Lysis Data:")
+
+lysis_metadata_container = st.expander("Show", expanded = st.session_state["lysis_metadata_expanded"])
+

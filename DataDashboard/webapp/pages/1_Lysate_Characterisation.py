@@ -229,8 +229,8 @@ if (st.session_state["raw_file_cached_status"]
         well_cols = meta_data_form.columns(2)
         well_cols[0].write(well)
         well_type_selected = well_cols[1].radio(
-            "Well Type",
-            ('Experiment', 'Negative_Control', "Ignore"),
+            "Expression System",
+            ("s70_GFP_uM", "T7_GFP_uM", 'Negative_Control', "Ignore"),
             key = well
             )
             
