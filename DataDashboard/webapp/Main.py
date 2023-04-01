@@ -64,12 +64,20 @@ max_time = Lysate_Timecourse_pd.loc[:,"Time"].max()
 
 # ---- manufacturing metadata organisation ----
 Lysate_Data_Categories = json.load(open(paths["Input"]["Lysate_Data_Categories"]))
+
 Lysate_Data_Categories_names = []
-Cell_Culture_Data_Categories_name = []
+Pre_Cultures_Data_Categories_name = []
+Main_Culture_Data_Categories_name = []
+Lysis_Data_Categories_name = []
+
 for key in Lysate_Data_Categories.keys():
     Lysate_Data_Categories_names.append(key)
-    if Lysate_Data_Categories[key]["Stage"] == "Cell_Culture":
-        Cell_Culture_Data_Categories_name.append(key)
+    if Lysate_Data_Categories[key]["Stage"] == "Cell_Culture_Pre_Cultures":
+        Pre_Cultures_Data_Categories_name.append(key)
+    elif Lysate_Data_Categories[key]["Stage"] == "Cell_Culture_Main_Culture":
+        Main_Culture_Data_Categories_name.append(key)
+    elif Lysate_Data_Categories[key]["Stage"] == "Lysis":
+        Lysis_Data_Categories_name.append(key)
 
     Lysate_Data_Categories_types = Lysate_Data_Categories[key]["Type"]
 
@@ -104,11 +112,12 @@ max_time_selected = st.sidebar.slider(
     label_visibility="visible"
     )
 
-st.sidebar.subheader("Select Manufacture Metadata")
-meta_data_selected = st.sidebar.multiselect(
-    "Select",
-    Lysate_Data_Categories_names,
-    Lysate_Data_Categories_names)
+#st.sidebar.subheader("Select Manufacture Metadata")
+#meta_data_selected = st.sidebar.multiselect(
+#    "Select",
+#    Lysate_Data_Categories_names,
+#    Lysate_Data_Categories_names)
+meta_data_selected = Lysate_Data_Categories_names
 
 filtered_df, meta_data_filtered_df = filter_df_for_plotting(Lysate_Timecourse_pd, expression_system_selected, meta_data_selected, max_time_selected, selected_lysates)
 
@@ -196,34 +205,61 @@ metadata_cols = cell_culture_metadata_container.columns(2)
 
 ## cell culture set up
 cell_culture_metadata_df = Lysate_Timecourse_pd.loc[Lysate_Timecourse_pd['Lysate_Inventory_Record'].isin(selected_lysates)]
-cell_culture_metadata_df = cell_culture_metadata_df[(["Lysate_Inventory_Record"] + Cell_Culture_Data_Categories_name)]
-cell_culture_metadata_df.drop_duplicates(inplace = True)
-cell_culture_metadata_df = pd.melt(
-    cell_culture_metadata_df,
+
+
+
+# ---- Pre Cultures ----
+
+Pre_Cultures_metadata_df = cell_culture_metadata_df[(["Lysate_Inventory_Record"] + Pre_Cultures_Data_Categories_name)]
+
+Pre_Cultures_metadata_df.drop_duplicates(inplace = True)
+Pre_Cultures_metadata_df = pd.melt(
+    Pre_Cultures_metadata_df,
     id_vars=["Lysate_Inventory_Record"],
     var_name="Metric",
-    value_vars = Cell_Culture_Data_Categories_name,
+    value_vars = Pre_Cultures_Data_Categories_name,
     value_name = "Value"
 )
-fig = px.bar(cell_culture_metadata_df, x="Metric", color="Lysate_Inventory_Record",
+fig = px.bar(Pre_Cultures_metadata_df, x="Metric", color="Lysate_Inventory_Record",
             y='Value',
-            title="Cell Culture Metrics",
+            title="Mini & Midi Culture Metrics",
             barmode='group',
             height=600,
         facet_row="Lysate_Inventory_Record"
         )
 
-
-
-
 metadata_cols[0].plotly_chart(fig)
 
+# ---- Main Culture ----
 
-metadata_cols[1].write("test")
+Main_Culture_metadata_df = cell_culture_metadata_df[(["Lysate_Inventory_Record"] + Main_Culture_Data_Categories_name)]
 
-# ---- Lysis metadata
+Main_Culture_metadata_df.drop_duplicates(inplace = True)
+Main_Culture_metadata_df = pd.melt(
+    Main_Culture_metadata_df,
+    id_vars=["Lysate_Inventory_Record"],
+    var_name="Metric",
+    value_vars = Main_Culture_Data_Categories_name,
+    value_name = "Value"
+)
+fig = px.bar(Main_Culture_metadata_df, x="Metric", color="Lysate_Inventory_Record",
+            y='Value',
+            title="Main Culture Metrics",
+            barmode='group',
+            height=600,
+        facet_row="Lysate_Inventory_Record"
+        )
+
+metadata_cols[1].plotly_chart(fig)
+
+
+# ---- Lysis metadata ----
 
 st.subheader("Lysis Data:")
 
 lysis_metadata_container = st.expander("Show", expanded = st.session_state["lysis_metadata_expanded"])
 
+Lysis_metadata_df = Lysate_Timecourse_pd[(["Lysate_Inventory_Record"] + Lysis_Data_Categories_name)]
+Lysis_metadata_df.drop_duplicates(inplace = True)
+
+lysis_metadata_container.dataframe(Lysis_metadata_df)

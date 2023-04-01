@@ -1,76 +1,75 @@
 {
-    "Maxi Growth Time": {
-        "Type": "Numberic",
-        "Stage": "Cell_Culture"
-    },
-    "Total Culture Volume ": {
-        "Type": "Numberic",
-        "Stage": "Cell_Culture"
-    }, 
-    "Cell Pellet Mass": {
-        "Type": "Numberic",
-        "Stage": "Cell_Culture"
-    },
-    "S30A Volume Added": {
-        "Type": "Numberic",
-        "Stage": "Cell_Culture"
-    },
-    "Freeze Speed": {
-        "Type": "Numberic",
-        "Stage": "Lysis"
-    },
-    "Pellet Mass : S30A Vol. Ratio": {
-        "Type": "Numberic",
-        "Stage": "Lysis"
-    },
-    "Total Resuspension Volume": {
-        "Type": "Numberic",
-        "Stage": "Lysis"
-    },
-    "Thaw time": {
-        "Type": "Numberic",
-        "Stage": "Lysis"
-    },
-    "Sonication Vessel Volume": {
-        "Type": "Numberic",
-        "Stage": "Lysis"
-    },
-    "Sonication Aliquot Volume": {
-        "Type": "Numberic",
-        "Stage": "Lysis"
-    },
-    "Pellet Mass : S30A Vol. Ratio at Sonication": {
-        "Type": "Numberic",
-        "Stage": "Lysis"
-    },
-    "Sonication Programme": {
-        "Type": "Numberic",
-        "Stage": "Lysis"
-    },
-    "Clarified S30 Extract Volume": {
-        "Type": "Numberic",
-        "Stage": "Lysis"
-    },
-    "S12 Extract Clarity": {
-        "Type": "Numberic",
-        "Stage": "Lysis"
-    },
-    "Midi OD600": {
-        "Type": "Numberic",
-        "Stage": "Cell_Culture"
-    },
-    "Mini Growth Time": {
-        "Type": "Numberic",
-        "Stage": "Cell_Culture"
-    },
-    "Midi Growth Time": {
-        "Type": "Numberic",
-        "Stage": "Cell_Culture"
-    },
-    "Harvest OD600": {
-        "Type": "Numberic",
-        "Stage": "Cell_Culture"
-    }
+  "Mini Growth Time": {
+    "Type": "Numberic",
+    "Stage": "Cell_Culture_Pre_Cultures"
+  },
+  "Midi OD600": {
+    "Type": "Numberic",
+    "Stage": "Cell_Culture_Pre_Cultures"
+  },
+  "Midi Growth Time": {
+    "Type": "Numberic",
+    "Stage": "Cell_Culture_Pre_Cultures"
+  },
+  "Maxi Growth Time": {
+    "Type": "Numberic",
+    "Stage": "Cell_Culture_Main_Culture"
+  },
+  "Total Culture Volume ": {
+    "Type": "Numberic",
+    "Stage": "Cell_Culture_Main_Culture"
+  },
+  "Harvest OD600": {
+    "Type": "Numberic",
+    "Stage": "Cell_Culture_Main_Culture"
+  },
+  "Cell Pellet Mass": {
+    "Type": "Numberic",
+    "Stage": "Cell_Culture_Main_Culture"
+  },
+  "S30A Volume Added": {
+    "Type": "Numberic",
+    "Stage": "Cell_Culture"
+  },
+  "Freeze Speed": {
+    "Type": "Numberic",
+    "Stage": "Lysis"
+  },
+  "Thaw time": {
+    "Type": "Numberic",
+    "Stage": "Lysis"
+  },
+  "Pellet Mass : S30A Vol. Ratio": {
+    "Type": "Numberic",
+    "Stage": "Lysis"
+  },
+  "Total Resuspension Volume": {
+    "Type": "Numberic",
+    "Stage": "Lysis"
+  },
+  "Sonication Vessel Volume": {
+    "Type": "Numberic",
+    "Stage": "Lysis"
+  },
+  "Sonication Aliquot Volume": {
+    "Type": "Numberic",
+    "Stage": "Lysis"
+  },
 
-    
+  "Pellet Mass : S30A Vol. Ratio at Sonication": {
+    "Type": "Numberic",
+    "Stage": "Lysis"
+  },
+  "Sonication Programme": {
+    "Type": "Numberic",
+    "Stage": "Lysis"
+  },
+  "Clarified S30 Extract Volume": {
+    "Type": "Numberic",
+    "Stage": "DSP"
+  },
+  "S12 Extract Clarity": {
+    "Type": "Numberic",
+    "Stage": "DSP"
+  }
 }
