@@ -124,7 +124,7 @@ filtered_df, meta_data_filtered_df = filter_df_for_plotting(Lysate_Timecourse_pd
 
 ## header
 header_container = st.container()
-header_container.header("SBSG Lysate Dashboard")
+header_container.title("SBSG Lysate Dashboard")
 
 for lysate in lysate_list:
     # individual lysate slice
