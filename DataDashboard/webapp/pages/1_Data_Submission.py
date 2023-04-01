@@ -71,14 +71,27 @@ if "Lysate_Inventory_List" not in st.session_state:
     for lysate in list(json.load(open(paths["Lysate_Inventory_List"])).values()):
         st.session_state["Lysate_Inventory_List"] = st.session_state["Lysate_Inventory_List"] + lysate
 
+if "Lab_Member_List" not in st.session_state:
+    # midly hacky way to import the json storing the lysates found in the database
+    st.session_state["Lab_Member_List"] = json.load(open(paths["Lab_Member_List"])).keys()
+
 if "Lysate_selected" not in st.session_state:
     st.session_state["Lysate_selected"] = "None"
+
+if "Lysate_Owner" not in st.session_state:
+    st.session_state["Lysate_Owner"] = "None"
 
 if "negative_control_designated" not in st.session_state:
     st.session_state["negative_control_designated"] = False
 
 if "acceptable_to_submit" not in st.session_state:
     st.session_state["acceptable_to_submit"] = False
+
+if "Lysate_already_submitted" not in st.session_state:
+    st.session_state["Lysate_already_submitted"] = False
+
+if "Lysate_successfully_submitted" not in st.session_state:
+    st.session_state["Lysate_successfully_submitted"] = False
 
 # define callbacks for updating button click session states
 def raw_file_cached_status_callback():
@@ -97,10 +110,21 @@ def submit_to_database_callback():
     # Mongo login
     database = mongo_login()
     Lysate_Timecourse_collection = database["Lysate_Timecourse"]
-    processed_df.reset_index(drop=True)
-    data_dict = processed_df.to_dict("records")
-    # Insert collection
-    Lysate_Timecourse_collection.insert_many(data_dict)
+
+    #### check that the Lysate_selected is not already in the database.
+    database = mongo_login()
+    Lysate_Timecourse_collection = database["Lysate_Timecourse"]
+    Lysate_Timecourse_pd = pd.DataFrame(list(Lysate_Timecourse_collection.find()))
+    # if not empty then check if do the check
+    if not (Lysate_Timecourse_pd.empty):
+        if (st.session_state["Lysate_selected"] in Lysate_Timecourse_pd["Lysate_Inventory_Record"].unique()):
+            st.session_state["Lysate_already_submitted"] = True
+    else:
+        processed_df.reset_index(drop=True)
+        data_dict = processed_df.to_dict("records")
+        # Insert collection
+        Lysate_Timecourse_collection.insert_many(data_dict)
+        st.session_state["Lysate_successfully_submitted"] = True
 
 
 
@@ -122,7 +146,8 @@ def form_callback():
         well_type_dict[well] = {
                         "Well_Type": st.session_state[well],
                         "Lysate_Inventory_Record": st.session_state["Lysate_selected"],
-                        "Energy_Solution": "Lysate_Characterisation_1"
+                        "Energy_Solution": "Lysate_Characterisation_1",
+                        "Lysate_Owner": st.session_state["Lab_Member_Selected"]
                         }
         # delete that individual well session state
         # not working
@@ -147,7 +172,7 @@ def form_callback():
     st.session_state["processed_data"] = processed_df
 
     st.session_state["data_preprocessing_complete"] = True
-   
+
     # sets button states
     st.session_state["form_submitted"] = True
     # minimise forms
@@ -212,6 +237,14 @@ if (st.session_state["raw_file_cached_status"]
         (st.session_state["Lysate_Inventory_List"]),
         key = "Lysate_selected"
         )
+    
+    # lysate owner selection
+    meta_data_form.selectbox(
+        "Select your name:",
+        # retrieves the lysates from session state
+        (st.session_state["Lab_Member_List"]),
+        key = "Lab_Member_Selected"
+        )
     # calibration model selection
     calibration_model_selected = meta_data_form.radio(
         "Select a Calibration Model:",
@@ -234,7 +267,7 @@ if (st.session_state["raw_file_cached_status"]
             key = well
             )
             
-    meta_data_form.form_submit_button("Submit", on_click = form_callback)
+    meta_data_form.form_submit_button("Process", on_click = form_callback)
 
 
     
@@ -275,12 +308,21 @@ if (st.session_state["raw_file_cached_status"]
 
             submit_to_database_container = st.container()
 
-            submit_to_database_container.header("submit_to_database_container")
+            submit_to_database_container.header("Submit to database")
 
-            submit_to_database_container.write("explain")
+            submit_to_database_container.write("Please ensure you have checked over the process data thoroughly and that you are happy with it before submission.")
+            submit_to_database_container.write("If you need to resubmit your data due to an error, the prior deletion of your existing data in the database is required.")
+            submit_to_database_container.write("Please contact Nadanai or someone with admin privileges to do this.")
+            submit_to_database_container.write("This is to prevent the accidental deletion of other people's data.")
 
             submit_to_database_container.button(
                 "Submit",
                 key="submit_to_database_button",
                 on_click = submit_to_database_callback
                 )
+            
+            if st.session_state["submit_to_database_button"]:
+                if st.session_state["Lysate_already_submitted"]:
+                    submit_to_database_container.warning("The database already contains data for " + st.session_state["Lysate_selected"] + ". Please ask Nadanai to ask someone with admin privileges to delete it before resubmission.")
+                if st.session_state["Lysate_successfully_submitted"]:
+                    submit_to_database_container.success("Data for " + st.session_state["Lysate_selected"] + " successfully submitted.")
