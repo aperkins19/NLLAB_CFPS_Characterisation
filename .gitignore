@@ -5,9 +5,11 @@ __pycache__/
 *$py.class
 
 #Labstep Auth
-DataDashboard/auth.json
+DataDashboard/auth/
 #MDB auth
 .env
+# webapp admin password
+DataDashboard/.streamlit/secrets.toml
 
 # output
 DataDashboard/webapp/static/tmp/
