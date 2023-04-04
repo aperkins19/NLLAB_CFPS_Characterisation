@@ -15,7 +15,7 @@ def lysate_characterisation_subplots(processed_df, negative_control_designated, 
     else:
         y = "RFUs"
 
-    plotting_df = processed_df[["Time", y, "Well"]]
+    plotting_df = processed_df[["Time", y, "Well", "Well_Type"]]
 
     #st.write(plotting_df.head())
 
@@ -29,39 +29,53 @@ def lysate_characterisation_subplots(processed_df, negative_control_designated, 
         fig.suptitle("Mean & SEM of " + st.session_state["Lysate_selected"], fontsize = 18)
 
         ax = plt.subplot(1, 1, 1)
-    
-        sns.lineplot(
-                data = plotting_df,
-                x="Time",
-                y=y,
-                linewidth=1,
-                ax = ax,
-                errorbar = "se",
-                legend = None,
+
+        # repeat for all expression systems
+        expression_systems = list(plotting_df["Well_Type"].unique())
+
+        for expression_system in expression_systems:
+
+            expression_filtered_df = plotting_df[plotting_df["Well_Type"] == expression_system]
+
+            if expression_system == "s70_GFP_uM":
                 color = "seagreen"
-                )
+            elif expression_system == "T7_GFP_uM":
+                color = "#69d"
+    
+            sns.lineplot(
+                    data = expression_filtered_df,
+                    x="Time",
+                    y=y,
+                    linewidth=1,
+                    ax = ax,
+                    errorbar = "se",
+                    label = expression_system,
+                    color = color
+                    )
 
         # calculating plot parameters
         # get the max gfp and round to nearest 0.01
         max_gfp = round(processed_df[y].max(),2)
         max_time = round(processed_df["Time"].max())
 
-        time_ticks = []
-
 
         ax.set_ylim([0, max_gfp])
         ax.set_yticks([0,(max_gfp/2), max_gfp])
         ax.set_yticklabels([0,(max_gfp/2), max_gfp], size = "x-large")
-        ax.set_ylabel("GFP (μM)", size = "x-large")
+        ax.set_ylabel(y, size = "x-large")
 
         ax.set_xticks([0, max_time/2, max_time])
         ax.set_xticklabels([0, max_time/2, max_time], size = "x-large")
         ax.set_xlabel("Time (Mins)", size = "x-large")
+
+        plt.legend()
         
 
         fig.savefig(paths["Output"]["tmp"] + st.session_state["Lysate_selected"] + "_meanplot.png")
 
         st.pyplot(fig)
+        st.write(str(processed_df[y].max()))
+        st.write(str(round(processed_df[y].max(),2)))
 
         with open(paths["Output"]["tmp"] + st.session_state["Lysate_selected"] + "_meanplot.png", "rb") as file:        
             st.download_button(

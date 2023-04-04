@@ -119,6 +119,12 @@ def submit_to_database_callback():
     if not (Lysate_Timecourse_pd.empty):
         if (st.session_state["Lysate_selected"] in Lysate_Timecourse_pd["Lysate_Inventory_Record"].unique()):
             st.session_state["Lysate_already_submitted"] = True
+        else:
+            processed_df.reset_index(drop=True)
+            data_dict = processed_df.to_dict("records")
+            # Insert collection
+            Lysate_Timecourse_collection.insert_many(data_dict)
+            st.session_state["Lysate_successfully_submitted"] = True
     else:
         processed_df.reset_index(drop=True)
         data_dict = processed_df.to_dict("records")
