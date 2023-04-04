@@ -183,7 +183,7 @@ with endpoint_col:
 
     st.subheader("Endpoint Signal at 300 Minutes")
     
-    endpoint_df = Lysate_Timecourse_pd[Lysate_Timecourse_pd["Time"] == 300]
+    endpoint_df = filtered_df[filtered_df["Time"] == 300]
 
     fig = plt.figure()
 
@@ -210,7 +210,7 @@ cell_culture_metadata_container = st.expander("Show", expanded = st.session_stat
 metadata_cols = cell_culture_metadata_container.columns(2)
 
 ## cell culture set up
-cell_culture_metadata_df = Lysate_Timecourse_pd.loc[Lysate_Timecourse_pd['Lysate_Inventory_Record'].isin(selected_lysates)]
+cell_culture_metadata_df = filtered_df.loc[filtered_df['Lysate_Inventory_Record'].isin(selected_lysates)]
 
 
 
@@ -263,7 +263,7 @@ st.subheader("Lysis Data:")
 
 lysis_metadata_container = st.expander("Show", expanded = st.session_state["lysis_metadata_expanded"])
 
-Lysis_metadata_df = Lysate_Timecourse_pd[(["Lysate_Inventory_Record"] + Lysis_Data_Categories_name)]
+Lysis_metadata_df = filtered_df[(["Lysate_Inventory_Record"] + Lysis_Data_Categories_name)]
 Lysis_metadata_df.drop_duplicates(inplace = True)
 
 lysis_metadata_container.dataframe(Lysis_metadata_df)
