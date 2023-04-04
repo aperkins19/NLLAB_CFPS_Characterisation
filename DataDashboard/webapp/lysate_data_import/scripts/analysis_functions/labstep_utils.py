@@ -38,8 +38,16 @@ def WrangleLabstepDataFields(lysate_data, lysate_data_categories):
 
         # extracts the data
         retrieved_data = lysate_data.get(category)
-        # populates the dictionary
-        retrieved_data_dict[category] = retrieved_data.getValue()
+
+        # If the data field is empty, i.e is 'NoneType' object, then set as None
+        if retrieved_data is None:
+
+            # populates the dictionary with None
+            retrieved_data_dict[category] = None
+        else:
+            # if not then extract the data
+            # populates the dictionary
+            retrieved_data_dict[category] = retrieved_data.getValue()
     # returns series
     return pd.Series(retrieved_data_dict)
 
