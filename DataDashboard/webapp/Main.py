@@ -84,21 +84,13 @@ for key in Lysate_Data_Categories.keys():
 
 # Sidebar
 # Using object notation
-st.sidebar.subheader("Select Data")
+st.sidebar.subheader("Timecourse Plotting Metrics")
 
-expression_system_selected = st.sidebar.selectbox(
-    "Select Expression System:",
-    ["All", "T7_GFP_uM", "s70_GFP_uM"]
-)
 
 y_values = st.sidebar.selectbox(
     "Y-Axis:",
     ["GFP_uM", "RFUs"]
 )
-selected_lysates = st.sidebar.multiselect(
-    "Lysates:",
-    lysate_list,
-    lysate_list)
 
 max_time_selected = st.sidebar.slider(
     "Set time",
@@ -111,6 +103,20 @@ max_time_selected = st.sidebar.slider(
     disabled=False,
     label_visibility="visible"
     )
+
+st.sidebar.subheader("Filter Data")
+
+expression_system_selected = st.sidebar.selectbox(
+    "Select Expression System:",
+    ["All", "T7_GFP_uM", "s70_GFP_uM"]
+)
+
+
+selected_lysates = st.sidebar.multiselect(
+    "Lysates:",
+    lysate_list,
+    lysate_list)
+
 
 #st.sidebar.subheader("Select Manufacture Metadata")
 #meta_data_selected = st.sidebar.multiselect(
@@ -225,7 +231,6 @@ fig = px.bar(Pre_Cultures_metadata_df, x="Metric", color="Lysate_Inventory_Recor
             title="Mini & Midi Culture Metrics",
             barmode='group',
             height=600,
-        facet_row="Lysate_Inventory_Record"
         )
 
 metadata_cols[0].plotly_chart(fig)
@@ -247,7 +252,6 @@ fig = px.bar(Main_Culture_metadata_df, x="Metric", color="Lysate_Inventory_Recor
             title="Main Culture Metrics",
             barmode='group',
             height=600,
-        facet_row="Lysate_Inventory_Record"
         )
 
 metadata_cols[1].plotly_chart(fig)
