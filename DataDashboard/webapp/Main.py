@@ -132,6 +132,15 @@ filtered_df, meta_data_filtered_df = filter_df_for_plotting(Lysate_Timecourse_pd
 header_container = st.container()
 header_container.title("SBSG Lysate Dashboard")
 
+ # convert to csv and download
+csv = Lysate_Timecourse_pd.to_csv().encode('utf-8')
+st.download_button(
+    label="Download full dataset as csv",
+    data=csv,
+    file_name = "SBSG_Lysate_DataDashboard_Dataset_Full.csv",
+    mime='text/csv',
+)
+
 for lysate in lysate_list:
     # individual lysate slice
     individual_lysate_slice = Lysate_Timecourse_pd[Lysate_Timecourse_pd["Lysate_Inventory_Record"] == lysate]
