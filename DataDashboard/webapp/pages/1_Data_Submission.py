@@ -10,6 +10,7 @@ database = mongo_login()
 from lysate_data_import.scripts.identify_wells import *
 from lysate_data_import.scripts.preprocessing_tidy import *
 from lysate_data_import.scripts.Calibration import *
+from lysate_data_import.scripts.zero_gfp import *
 from lysate_data_import.scripts.labstep_annotation import *
 
 # dev modules
@@ -172,9 +173,11 @@ def form_callback():
     data_in_progress = preprocessing_tidy(raw_upload, well_type_dict, st.session_state["negative_control_designated"], paths)
     # 2. Calibrate signal with selected fluorescent protein model
     data_in_progress = Calibration(data_in_progress, st.session_state["negative_control_designated"], Analysis_Config, paths)
-    # 3. Annotated with labstep metadata
+    # 3. Zero GFP signal
+    data_in_progress = Zero_GFP(data_in_progress, st.session_state["negative_control_designated"], paths)
+    # 4. Annotated with labstep metadata
     processed_df = Annotate_With_Labstep_Metadata(data_in_progress, paths)
-    # 4. Cache the processed data to be accessed in the script
+    # 5. Cache the processed data to be accessed in the script
     st.session_state["processed_data"] = processed_df
 
     st.session_state["data_preprocessing_complete"] = True
