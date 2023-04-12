@@ -7,6 +7,7 @@ import json
 import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.express as px
+import plotly.graph_objects as go
 from utils.mongo_utils import *
 
 
@@ -47,11 +48,15 @@ def refilter_callback():
     filter_df_for_plotting(Lysate_Timecourse_pd, expression_system_selected, meta_data_selected, max_time_selected, selected_lysates)
 
 
-
 # get dataset
-database = mongo_login()
-Lysate_Timecourse_collection = database["Lysate_Timecourse"]
-Lysate_Timecourse_pd = pd.DataFrame(list(Lysate_Timecourse_collection.find()))
+@st.cache_data
+def get_dataset():
+    database = mongo_login()
+    Lysate_Timecourse_collection = database["Lysate_Timecourse"]
+    Lysate_Timecourse_pd = pd.DataFrame(list(Lysate_Timecourse_collection.find()))
+    return Lysate_Timecourse_pd
+
+Lysate_Timecourse_pd = get_dataset()
 
 
 ## Get data for populating the chart selection options
@@ -65,21 +70,12 @@ max_time = Lysate_Timecourse_pd.loc[:,"Time"].max()
 # ---- manufacturing metadata organisation ----
 Lysate_Data_Categories = json.load(open(paths["Input"]["Lysate_Data_Categories"]))
 
-Lysate_Data_Categories_names = []
-Pre_Cultures_Data_Categories_name = []
-Main_Culture_Data_Categories_name = []
-Lysis_Data_Categories_name = []
+Lysate_Data_Categories_names = [key for key in Lysate_Data_Categories.keys()]
+Pre_Cultures_Data_Categories_name = [key for key in Lysate_Data_Categories.keys() if Lysate_Data_Categories[key]["Stage"] == "Cell_Culture_Pre_Cultures"]
+Main_Culture_Data_Categories_name = [key for key in Lysate_Data_Categories.keys() if Lysate_Data_Categories[key]["Stage"] == "Cell_Culture_Main_Culture"]
+Lysis_Data_Categories_name = [key for key in Lysate_Data_Categories.keys() if Lysate_Data_Categories[key]["Stage"] == "Lysis"]
 
-for key in Lysate_Data_Categories.keys():
-    Lysate_Data_Categories_names.append(key)
-    if Lysate_Data_Categories[key]["Stage"] == "Cell_Culture_Pre_Cultures":
-        Pre_Cultures_Data_Categories_name.append(key)
-    elif Lysate_Data_Categories[key]["Stage"] == "Cell_Culture_Main_Culture":
-        Main_Culture_Data_Categories_name.append(key)
-    elif Lysate_Data_Categories[key]["Stage"] == "Lysis":
-        Lysis_Data_Categories_name.append(key)
-
-    Lysate_Data_Categories_types = Lysate_Data_Categories[key]["Type"]
+Lysate_Data_Categories_types = [Lysate_Data_Categories[key]["Type"] for key in Lysate_Data_Categories.keys()]
 
 
 # Sidebar
