@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 import json
-
+from pathlib import Path
 from utils.labstep_utils import *
 from utils.mongo_utils import *
 
@@ -20,10 +20,8 @@ import os
 # import paths
 paths = json.load(open("/DataDashboard_app/paths.json"))
 
-##### define functions
 
 # reads uploaded excel raw data file and caches in server memory
-
 def read_uploaded_excel(uploaded_file):
     return pd.read_excel(uploaded_file, header=None)
 
@@ -36,6 +34,7 @@ def convert_df(df):
 # initialise session states for buttons and cached files
 if "processed_data" not in st.session_state:
     st.session_state["processed_data"] = None
+
 
 if "raw_data_viewer_expanded" not in st.session_state:
     st.session_state["raw_data_viewer_expanded"] = True
@@ -197,8 +196,8 @@ def form_callback():
 
 #### begin page
 
-st.title("Lysate Characterisation")
-st.write("text here to explain")
+st.title("Submit New Data")
+
 
 # begin upload section
 st.subheader("Upload Raw Data")
