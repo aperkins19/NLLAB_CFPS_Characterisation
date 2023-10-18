@@ -58,7 +58,7 @@ jupyter_server_terminals==0.4.4
 jupyterlab-pygments==0.2.2
 jupyterlab-widgets==3.0.6
 kiwisolver==1.4.4
-labstep==3.20.0
+labstep==3.22.0
 lxml==4.9.1
 markdown-it-py==2.2.0
 MarkupSafe==2.1.2

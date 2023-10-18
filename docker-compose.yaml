@@ -21,7 +21,7 @@ services:
 
     image: mongo:6.0
     container_name: mongodb
-    #restart: unless-stopped
+    restart: unless-stopped
 
     environment: # setting up required env variables to access mongodb
       MONGO_INITDB_ROOT_USERNAME: ${MongoLogin}
@@ -29,6 +29,8 @@ services:
 
     ports:
       - 27017:27017
+
+    user: "root" 
 
     volumes: # where the db directory is mounted to allow the data to persist.
     - ./database_data:/data/db

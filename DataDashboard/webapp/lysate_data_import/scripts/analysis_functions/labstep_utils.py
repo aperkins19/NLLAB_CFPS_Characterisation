@@ -33,6 +33,8 @@ def WrangleLabstepDataFields(lysate_data, lysate_data_categories):
     # initialise dict
     retrieved_data_dict = {}
 
+    print(type(lysate_data))
+
     # iterate over the categories
     for category in lysate_data_categories.keys():
 
@@ -82,9 +84,14 @@ def GetLysateData(lysate_name, lysate_data_categories, workspace):
         # if theres only one, extract
         lysate = lysate[0]
 
+    print("lysate")
+    print(type(lysate))
+
     # extract the data associated with that lysate
     lysate_data = lysate.getData()
-
+    lysate_data = lysate_data[0]
+    print("lysate_data")
+    print(type(lysate_data))
     # function defined above
     # returns pd Series
     lysate_data_series = WrangleLabstepDataFields(lysate_data, lysate_data_categories)
